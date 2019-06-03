@@ -1,0 +1,547 @@
+---
+swagger: "2.0"
+info:
+  description: "API para manutenção da Livraria Vitual"
+  version: "1.0.0"
+  title: "API Livraria Virtual - Hugo Vinicius"
+  contact:
+    email: "hugo.desenvolvimento@outlook.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/HugoViniciusReis/LivrariaEletronica/1.0.0"
+tags:
+- name: "Livros"
+  description: "Manipular recursos de livros"
+- name: "Autores"
+  description: "Manipula recursos de autores"
+- name: "Categorias"
+  description: "Manipula recursos de categorias"
+- name: "Editoras"
+  description: "Manipula recuros de editoras"
+schemes:
+- "https"
+paths:
+  /v1/Livros:
+    get:
+      tags:
+      - "Livros"
+      summary: "Lista de livros"
+      description: "Esse método retorna uma lista de livros"
+      operationId: "v1LivrosGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pular"
+        in: "query"
+        description: "número de registros para pular para paginação"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "número máximo de registros para retornar"
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "Array de livros"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Livro"
+        400:
+          description: "Falha nos parâmtros de entrada"
+      x-swagger-router-controller: "Livros"
+    post:
+      tags:
+      - "Livros"
+      summary: "Adicionar livros"
+      description: "Adiciona um item ao sistema"
+      operationId: "addLivros"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "livro"
+        description: "Adiciona um livro no sistema"
+        required: false
+        schema:
+          $ref: "#/definitions/Livro"
+      responses:
+        201:
+          description: "Livro Incluido"
+        400:
+          description: "Entrada inválida, objeto inválido"
+        409:
+          description: "Um livro já existente com esse ISBN"
+      x-swagger-router-controller: "Livros"
+    put:
+      tags:
+      - "Livros"
+      summary: "Atualiza um livro"
+      operationId: "updateLivro"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Livro que precisa ser atualizado"
+        required: true
+        schema:
+          $ref: "#/definitions/Livro"
+      responses:
+        400:
+          description: "ISBN inválido"
+        404:
+          description: "livro não encontrado"
+      x-swagger-router-controller: "Livros"
+  /v1/Livros/{ISBN}:
+    delete:
+      tags:
+      - "Livros"
+      summary: "Deletar livros por ISBN"
+      operationId: "deleteOrder"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "ISBN"
+        in: "path"
+        description: "ISBN do livro para ser excluido"
+        required: true
+        type: "string"
+        minimum: 10
+      responses:
+        200:
+          description: "Livro excluido com sucesso"
+        400:
+          description: "ISBN a ser excluido inválido"
+        404:
+          description: "ISBN não encontrado"
+      x-swagger-router-controller: "Livros"
+  /v1/Autores:
+    get:
+      tags:
+      - "Autores"
+      summary: "Lista de Autores"
+      description: "Esse método retorna uma lista de autores"
+      operationId: "v1AutoresGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pular"
+        in: "query"
+        description: "número de registros para pular para paginação"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "número máximo de registros para retornar"
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "Array de autores"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Autor"
+        400:
+          description: "Falha nos parâmtros de entrada"
+      x-swagger-router-controller: "Autores"
+    post:
+      tags:
+      - "Autores"
+      summary: "Adicionar autor"
+      description: "Adiciona um autor ao sistema"
+      operationId: "addAutores"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "autor"
+        description: "Adiciona um autor no sistema"
+        required: false
+        schema:
+          $ref: "#/definitions/Livro"
+      responses:
+        201:
+          description: "Autor Incluido"
+        400:
+          description: "Entrada inválida, objeto inválido"
+        409:
+          description: "Um autor já existente com o código informado"
+      x-swagger-router-controller: "Autores"
+    put:
+      tags:
+      - "Autores"
+      summary: "Atualiza um autor"
+      operationId: "updateAutor"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Autor que precisa ser atualizado"
+        required: true
+        schema:
+          $ref: "#/definitions/Autor"
+      responses:
+        400:
+          description: "Autor inválido"
+        404:
+          description: "autor não encontrado"
+      x-swagger-router-controller: "Autores"
+  /v1/Autores/{idAutor}:
+    delete:
+      tags:
+      - "Autores"
+      summary: "Deletar autor por id"
+      operationId: "deleteAutor"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "idAutor"
+        in: "path"
+        description: "idAutor a ser excluido"
+        required: true
+        type: "string"
+        minimum: 10
+      responses:
+        200:
+          description: "Autor excluido com sucesso"
+        400:
+          description: "Autor a ser excluido inválido"
+        404:
+          description: "Autor não encontrado"
+      x-swagger-router-controller: "Autores"
+  /v1/Categoria:
+    get:
+      tags:
+      - "Categorias"
+      summary: "Lista de Categorias"
+      description: "Esse método retorna uma lista de categorias"
+      operationId: "v1CategoriaGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pular"
+        in: "query"
+        description: "número de registros para pular para paginação"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "número máximo de registros para retornar"
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "Array de categorias"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Categoria"
+        400:
+          description: "Falha nos parâmtros de entrada"
+      x-swagger-router-controller: "Categorias"
+    post:
+      tags:
+      - "Categorias"
+      summary: "Adicionar categoria"
+      description: "Adiciona uma categoria ao sistema"
+      operationId: "addCategoria"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "categoria"
+        description: "Adiciona uma categoria no sistema"
+        required: false
+        schema:
+          $ref: "#/definitions/Categoria"
+      responses:
+        201:
+          description: "Categoria Incluida"
+        400:
+          description: "Entrada inválida, objeto inválido"
+        409:
+          description: "Uma categoria já existente com o código informado"
+      x-swagger-router-controller: "Categorias"
+    put:
+      tags:
+      - "Categorias"
+      summary: "Atualiza uma categoria"
+      operationId: "updateCategoria"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Categoria que precisa ser atualizado"
+        required: true
+        schema:
+          $ref: "#/definitions/Categoria"
+      responses:
+        400:
+          description: "Categoria inválido"
+        404:
+          description: "Categoria não encontrado"
+      x-swagger-router-controller: "Categorias"
+  /v1/Categoria/{idCategoria}:
+    delete:
+      tags:
+      - "Categorias"
+      summary: "Deletar uma categoria"
+      operationId: "deleteCategoria"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "idCategoria"
+        in: "path"
+        description: "idCategoria a ser excluido"
+        required: true
+        type: "string"
+        minimum: 10
+      responses:
+        200:
+          description: "Categoria excluido com sucesso"
+        400:
+          description: "Categoria a ser excluido inválido"
+        404:
+          description: "Categoria não encontrado"
+      x-swagger-router-controller: "Categorias"
+  /v1/Editoras:
+    get:
+      tags:
+      - "Editoras"
+      summary: "Lista de Editoras"
+      description: "Esse método retorna uma lista de editora"
+      operationId: "v1EditorasGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pular"
+        in: "query"
+        description: "número de registros para pular para paginação"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "número máximo de registros para retornar"
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "Array de editoras"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Editora"
+        400:
+          description: "Falha nos parâmtros de entrada"
+      x-swagger-router-controller: "Editoras"
+    post:
+      tags:
+      - "Editoras"
+      summary: "Adicionar editoras"
+      description: "Adiciona uma editora ao sistema"
+      operationId: "addEditora"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "editora"
+        description: "Adiciona uma editora ao sistema"
+        required: false
+        schema:
+          $ref: "#/definitions/Editora"
+      responses:
+        201:
+          description: "Editora Incluido"
+        400:
+          description: "Entrada inválida, objeto inválido"
+        409:
+          description: "Um autor já existente com o código informado"
+      x-swagger-router-controller: "Editoras"
+    put:
+      tags:
+      - "Editoras"
+      summary: "Atualiza uma editora"
+      operationId: "updateEditora"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Editora que precisa ser atualizado"
+        required: true
+        schema:
+          $ref: "#/definitions/Editora"
+      responses:
+        400:
+          description: "Editora inválido"
+        404:
+          description: "editora não encontrado"
+      x-swagger-router-controller: "Editoras"
+  /v1/Editoras/{idEditora}:
+    delete:
+      tags:
+      - "Editoras"
+      summary: "Deletar editora por id"
+      operationId: "deleteEditoras"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "idEditora"
+        in: "path"
+        description: "idEditora a ser excluido"
+        required: true
+        type: "string"
+        minimum: 10
+      responses:
+        200:
+          description: "Editora excluido com sucesso"
+        400:
+          description: "Editora a ser excluido inválido"
+        404:
+          description: "Editora não encontrado"
+      x-swagger-router-controller: "Editoras"
+definitions:
+  Livro:
+    type: "object"
+    required:
+    - "ISBN"
+    - "autor"
+    - "editora"
+    - "nome"
+    - "preco"
+    properties:
+      ISBN:
+        type: "string"
+        example: "3687073"
+      nome:
+        type: "string"
+        example: "A Vida como ele é"
+      preco:
+        type: "number"
+        example: 20.5
+      autor:
+        $ref: "#/definitions/Autor"
+      editora:
+        $ref: "#/definitions/Editora"
+      categora:
+        $ref: "#/definitions/Categoria"
+    example:
+      preco: 20.5
+      ISBN: "3687073"
+      categora:
+        idCategoria: 50
+        descricao: "Romance"
+      nome: "A Vida como ele é"
+      editora:
+        idCategoria: 100
+        descricao: "Companhia das Letra"
+      autor:
+        idAutor: 1
+        name: "Amado Jorge"
+        descricao: "História do autor"
+  Autor:
+    type: "object"
+    required:
+    - "descricao"
+    - "idAutor"
+    properties:
+      idAutor:
+        type: "integer"
+        format: "int32"
+        example: 1
+      name:
+        type: "string"
+        example: "Amado Jorge"
+      descricao:
+        type: "string"
+        example: "História do autor"
+    example:
+      idAutor: 1
+      name: "Amado Jorge"
+      descricao: "História do autor"
+  Categoria:
+    type: "object"
+    required:
+    - "descricao"
+    - "idCategoria"
+    properties:
+      idCategoria:
+        type: "integer"
+        format: "int32"
+        example: 50
+      descricao:
+        type: "string"
+        example: "Romance"
+    example:
+      idCategoria: 50
+      descricao: "Romance"
+  Editora:
+    type: "object"
+    required:
+    - "descricao"
+    properties:
+      idCategoria:
+        type: "integer"
+        format: "int32"
+        example: 100
+      descricao:
+        type: "string"
+        example: "Companhia das Letra"
+    example:
+      idCategoria: 100
+      descricao: "Companhia das Letra"
